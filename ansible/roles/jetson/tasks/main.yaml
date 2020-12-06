@@ -38,7 +38,6 @@
     - linux-firmware
     - locales
     - net-tools
-    - netplan.io
     - pciutils
     - python3-dev
     - ssh
@@ -59,16 +58,6 @@
   shell: systemctl enable {{ item }}
   loop:
     - ssh
-    - systemd-networkd
-    - systemd-resolved
-
-- name: Create network conf
-  template:
-    src: etc/netplan/netcfg.yaml
-    dest: /etc/netplan/netcfg.yaml
-    owner: root
-    group: root
-    mode: 0644
 
 - name: Create new user
   user:
