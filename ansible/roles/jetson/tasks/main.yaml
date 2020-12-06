@@ -49,6 +49,7 @@
     - usbutils
     - vim
     - wpasupplicant
+    - bzip2
 
 - name: Generate locales
   locale_gen:
