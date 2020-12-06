@@ -48,7 +48,7 @@ printf "Extract L4T...        "
 printf "[OK]\n"
 
 printf "Create image...       "
-./create-jetson-nano-sd-card-image.sh -o jetson.img -s 8G -r 200
+./create-jetson-nano-sd-card-image.sh -o jetson.img -s 8G -r 300
 printf "OK\n"
 
 printf "\e[32mImage created successfully\n"
