@@ -48,9 +48,7 @@ printf "Extract L4T...        "
 printf "[OK]\n"
 
 printf "Create image...       "
-rootfs_size=$(du -hsBM $JETSON_BUILD_DIR/Linux_for_Tegra/rootfs | awk '{print $1}')
-rootfs_size=$(echo $((${rootfs_size%?} + 200))"M")
-./create-jetson-nano-sd-card-image.sh -o jetson.img -s $rootfs_size -r 200
+./create-jetson-nano-sd-card-image.sh -o jetson.img -s 8G -r 200
 printf "OK\n"
 
 printf "\e[32mImage created successfully\n"
