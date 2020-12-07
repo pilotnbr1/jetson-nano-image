@@ -6,7 +6,7 @@
 
 set -e
 
-BSP=https://developer.nvidia.com/embedded/r32-2-3_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_R32.2.3_aarch64.tbz2
+BSP=https://developer.nvidia.com/embedded/L4T/r32_Release_v4.4/r32_Release_v4.4-GMC3/T210/Tegra210_Linux_R32.4.4_aarch64.tbz2
 
 # Check if the user is not root
 if [ "x$(whoami)" != "xroot" ]; then
