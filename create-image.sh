@@ -6,7 +6,7 @@
 
 set -e
 
-BSP=https://download.openhdfpv.com/Tegra210_Linux_R32.4.4_aarch64.tbz2
+BSP=http://download.openhdfpv.com/Tegra210_Linux_R32.4.4_aarch64.tbz2
 
 # Check if the user is not root
 if [ "x$(whoami)" != "xroot" ]; then
