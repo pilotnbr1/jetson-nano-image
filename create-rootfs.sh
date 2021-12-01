@@ -7,7 +7,7 @@
 set -e
 
 ARCH=arm64
-RELEASE=focal
+RELEASE=bionic
 
 # Check if the user is not root
 if [ "x$(whoami)" != "xroot" ]; then
@@ -24,7 +24,7 @@ fi
 # Install prerequisites packages
 printf "\e[32mInstall the dependencies...  "
 apt-get update > /dev/null
-apt-get install --no-install-recommends -y qemu-user-static debootstrap binfmt-support coreutils parted wget gdisk e2fsprogs > /dev/null
+apt-get install --no-install-recommends -y qemu-user-static debootstrap coreutils parted wget gdisk e2fsprogs
 printf "[OK]\n"
 
 # Create rootfs directory
@@ -32,26 +32,33 @@ printf "Create rootfs directory...    "
 mkdir -p $JETSON_ROOTFS_DIR
 printf "[OK]\n"
 
-# Run debootstrap first stage
+# Download ubuntu base image
+if [ ! "$(ls -A $JETSON_ROOTFS_DIR)" ]; then
+	printf "Download the base image...   "
+  	wget -qO- http://cdimage.ubuntu.com/ubuntu-base/releases/18.04.5/release/ubuntu-base-18.04.5-base-arm64.tar.gz | tar xzvf - -C $JETSON_ROOTFS_DIR > /dev/null
+	printf "[OK]\n"
+else
+	printf "Base image already downloaded"
+fi
+
+# Run debootsrap first stage
 printf "Run debootstrap first stage...  "
 debootstrap \
         --arch=$ARCH \
+        --keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg \
         --foreign \
         --variant=minbase \
-        --include=python3,python3-apt \
+	--include=python3,libegl1,python3-apt \
         $RELEASE \
-	$JETSON_ROOTFS_DIR > /dev/null
+	$JETSON_ROOTFS_DIR 
 printf "[OK]\n"
 
-cat <<EOF > $JETSON_ROOTFS_DIR/etc/resolv.conf
-nameserver 1.1.1.1
-EOF
-
+# Copy qemu-aarch64-static
 cp /usr/bin/qemu-aarch64-static $JETSON_ROOTFS_DIR/usr/bin
 
 # Run debootstrap second stage
 printf "Run debootstrap second stage... "
-chroot $JETSON_ROOTFS_DIR /bin/bash -c "/debootstrap/debootstrap --second-stage" > /dev/null
+chroot $JETSON_ROOTFS_DIR /bin/bash -c "/debootstrap/debootstrap --second-stage"  
 printf "[OK]\n"
 
 printf "Success!\n"

@@ -2,11 +2,11 @@
 
 #
 # Author: Badr BADRI © pythops
-#
+# 
 
 set -e
 
-BSP=https://developer.nvidia.com/embedded/l4t/r32_release_v5.1/r32_release_v5.1/t210/jetson-210_linux_r32.5.1_aarch64.tbz2
+BSP=http://download.openhdfpv.com/Tegra210_Linux_R32.4.4_aarch64.tbz2
 
 # Check if the user is not root
 if [ "x$(whoami)" != "xroot" ]; then
@@ -26,12 +26,6 @@ if [ ! "$(ls -A $JETSON_ROOTFS_DIR)" ]; then
 	exit 1
 fi
 
-# Check if board type is specified
-if [ ! $JETSON_NANO_BOARD ]; then
-	printf "\e[31mJetson nano board type must be specified\e[0m\n"
-	exit 1
-fi
-
 printf "\e[32mBuild the image ...\n"
 
 # Create the build dir if it does not exists
@@ -45,14 +39,12 @@ if [ ! "$(ls -A $JETSON_BUILD_DIR)" ]; then
         printf "[OK]\n"
 fi
 
-cp -rp $JETSON_ROOTFS_DIR/*  $JETSON_BUILD_DIR/Linux_for_Tegra/rootfs/ > /dev/null
+cp -rp $JETSON_ROOTFS_DIR/*  $JETSON_BUILD_DIR/Linux_for_Tegra/rootfs/ 
 
-patch $JETSON_BUILD_DIR/Linux_for_Tegra/nv_tegra/nv-apply-debs.sh < patches/nv-apply-debs.diff
-
-pushd $JETSON_BUILD_DIR/Linux_for_Tegra/ > /dev/null
+pushd $JETSON_BUILD_DIR/Linux_for_Tegra/ 
 
 printf "Extract L4T...        "
-./apply_binaries.sh > /dev/null
+./apply_binaries.sh 
 printf "[OK]\n"
 
 pushd $JETSON_BUILD_DIR/Linux_for_Tegra/tools

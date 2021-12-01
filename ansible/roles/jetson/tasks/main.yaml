@@ -1,4 +1,12 @@
 ---
+- name: setup dns
+  template:
+    src: etc/resolv.conf
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Update /etc/apt/sources.list
   template:
     src: etc/apt/sources.list
@@ -17,6 +25,7 @@
     name: "{{ item }}"
     state: present
   loop:
+    - libasound2
     - libgles2
     - libpangoft2-1.0-0
     - libharfbuzz0b
@@ -40,7 +49,6 @@
     - libpython3-stdlib
     - libpython3.8-minimal
     - libpython3.8-stdlib
-    - libreadline8
     - libtinfo5
     - python3-minimal
     - python3.8
@@ -60,10 +68,6 @@
     - libxcb-sync1
     - libxcb-xfixes0
     - libxshmfence1
-    - libpython2-stdlib
-    - python2
-    - python2-minimal
-    - python-is-python2
     - libgstreamer1.0-0
     - libgstreamer-plugins-bad1.0-0
     - libpangocairo-1.0-0
@@ -87,9 +91,9 @@
     - linux-firmware
     - locales
     - net-tools
-    - netplan.io
     - pciutils
     - python3-dev
+    - python-minimal
     - ssh
     - sudo
     - systemd
@@ -98,6 +102,7 @@
     - usbutils
     - vim
     - wpasupplicant
+    - bzip2
 
 - name: Generate locales
   locale_gen:
@@ -110,15 +115,6 @@
     enabled: yes
   loop:
     - ssh
-    - systemd-networkd
-
-- name: Update network conf
-  template:
-    src: etc/netplan/netcfg.yaml
-    dest: /etc/netplan/netcfg.yaml
-    owner: root
-    group: root
-    mode: 0644
 
 - name: Create new user
   user:
@@ -128,13 +124,3 @@
     create_home: yes
     groups: sudo
     state: present
-
-- name: Download pip
-  get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: /tmp/get-pip.py
-
-- name: Install pip
-  shell: python3 /tmp/get-pip.py --user
-  become: yes
-  become_user: "{{ new_user.name }}"
