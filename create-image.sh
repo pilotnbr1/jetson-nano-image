@@ -6,7 +6,7 @@
 
 set -e
 
-BSP=http://download.openhdfpv.com/Tegra210_Linux_R32.4.4_aarch64.tbz2
+BSP=https://developer.nvidia.com/embedded/l4t/r32_release_v5.2/t210/jetson-210_linux_r32.5.2_aarch64.tbz2
 
 # Check if the user is not root
 if [ "x$(whoami)" != "xroot" ]; then
